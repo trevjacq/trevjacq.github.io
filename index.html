@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trevor Young — Projects</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    :root {
+      --bg: #f5f2ec; --ink: #111010; --mid: #6b6760;
+      --light: #bbb8b1; --rule: #d8d5ce; --placeholder: #e8e5df;
+      --serif: 'DM Serif Display', Georgia, serif;
+      --sans: 'DM Sans', sans-serif;
+      --green: #4a7c59; --amber: #9a6f35;
+    }
+    body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.6; overflow-x: hidden; cursor: none; }
+    a { color: inherit; text-decoration: none; }
+
+    /* CURSOR */
+    .cursor { width: 8px; height: 8px; background: var(--ink); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s, opacity 0.2s, background 0.2s; }
+    .cursor.expand { width: 36px; height: 36px; opacity: 0.07; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.75rem 3.5rem; background: rgba(245,242,236,0.88); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+    nav.scrolled { border-color: var(--rule); }
+    .nav-logo { font-family: var(--serif); font-size: 1.05rem; }
+    .nav-logo span { color: var(--mid); font-style: italic; }
+    .nav-right { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--light); }
+
+    /* HERO */
+    .hero { padding: 14rem 3.5rem 6rem; border-bottom: 1px solid var(--rule); }
+    .hero-kicker { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--light); margin-bottom: 1.75rem; opacity: 0; animation: rise 0.7s ease forwards 0.2s; }
+    .hero-headline { font-family: var(--serif); font-size: clamp(3.5rem, 9vw, 8rem); line-height: 0.95; letter-spacing: -0.025em; opacity: 0; animation: rise 0.8s ease forwards 0.4s; }
+    .hero-headline em { font-style: italic; color: var(--mid); }
+    .hero-sub { margin-top: 2.5rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem; opacity: 0; animation: rise 0.7s ease forwards 0.7s; }
+    .hero-desc { max-width: 480px; font-size: 0.92rem; line-height: 1.8; color: var(--mid); }
+    .hero-count { font-family: var(--serif); font-size: 3.5rem; line-height: 1; color: var(--rule); }
+    .hero-count span { display: block; font-family: var(--sans); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--light); margin-top: 0.25rem; }
+
+    /* FILTER BAR */
+    .filter-bar { display: flex; gap: 0; border-bottom: 1px solid var(--rule); padding: 0 3.5rem; overflow-x: auto; }
+    .filter-btn { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--light); padding: 1.1rem 1.5rem; border: none; background: none; cursor: none; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.2s, border-color 0.2s; white-space: nowrap; font-family: var(--sans); }
+    .filter-btn:hover { color: var(--mid); }
+    .filter-btn.active { color: var(--ink); border-color: var(--ink); }
+
+    /* PROJECT LIST */
+    .projects-wrap { padding: 0 3.5rem; }
+
+    .project-block {
+      border-bottom: 1px solid var(--rule);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .project-block.visible { opacity: 1; transform: none; }
+    .project-block.hidden { display: none; }
+
+    /* PROJECT HEADER ROW — click to expand */
+    .project-header {
+      display: grid;
+      grid-template-columns: 60px 1fr auto auto;
+      align-items: center;
+      gap: 2rem;
+      padding: 2.5rem 0;
+      cursor: none;
+    }
+
+    .project-index { font-size: 0.7rem; letter-spacing: 0.1em; color: var(--light); }
+
+    .project-title-wrap { }
+    .project-name { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.1; letter-spacing: -0.01em; transition: color 0.2s; }
+    .project-block:hover .project-name { color: var(--mid); }
+    .project-tagline { font-size: 0.83rem; color: var(--mid); margin-top: 0.35rem; }
+
+    .project-badges { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; }
+    .badge { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.25rem 0.65rem; border: 1px solid; border-radius: 0; }
+    .badge-active { color: var(--green); border-color: var(--green); }
+    .badge-progress { color: var(--amber); border-color: var(--amber); }
+    .badge-placeholder { color: var(--light); border-color: var(--rule); }
+
+    .expand-icon { font-size: 1.2rem; color: var(--light); transition: transform 0.3s, color 0.2s; flex-shrink: 0; }
+    .project-block.open .expand-icon { transform: rotate(45deg); color: var(--ink); }
+
+    /* PROJECT DETAIL PANEL */
+    .project-detail {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, padding 0.4s ease;
+    }
+    .project-block.open .project-detail { max-height: 600px; padding-bottom: 3rem; }
+
+    .detail-overview h4 {
+      font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--light); margin-bottom: 1rem;
+    }
+    .detail-overview p { font-size: 0.88rem; line-height: 1.85; color: var(--mid); margin-bottom: 1rem; }
+    .detail-overview p strong { color: var(--ink); font-weight: 500; }
+
+    .detail-meta { display: flex; flex-direction: column; gap: 0; }
+    .meta-row { display: flex; justify-content: space-between; align-items: baseline; padding: 0.85rem 0; border-bottom: 1px solid var(--rule); font-size: 0.83rem; }
+    .meta-row:first-child { border-top: 1px solid var(--rule); }
+    .meta-label { color: var(--light); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; }
+    .meta-value { color: var(--ink); text-align: right; }
+    .meta-value.tags { display: flex; gap: 0.35rem; flex-wrap: wrap; justify-content: flex-end; }
+    .tag { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); border: 1px solid var(--rule); padding: 0.15rem 0.5rem; }
+
+    .github-link { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); transition: color 0.2s, gap 0.2s; }
+    .github-link:hover { color: var(--ink); gap: 0.8rem; }
+
+    /* PLACEHOLDER BLOCKS */
+    .project-block.placeholder { background: transparent; }
+    .project-block.placeholder .project-name { color: var(--rule); font-style: italic; }
+    .project-block.placeholder .project-tagline { color: var(--placeholder); }
+    .project-block.placeholder:hover .project-name { color: var(--light); }
+
+    /* FOOTER */
+    footer { display: flex; justify-content: space-between; align-items: center; padding: 2rem 3.5rem; border-top: 1px solid var(--rule); margin-top: 4rem; flex-wrap: wrap; gap: 1rem; }
+    footer p { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--light); }
+    footer a { color: var(--mid); transition: color 0.2s; }
+    footer a:hover { color: var(--ink); }
+
+    @keyframes rise { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform:none; } }
+
+    @media (max-width: 900px) {
+      nav { padding: 1.5rem 2rem; }
+      .hero, .projects-wrap, footer { padding-left: 2rem; padding-right: 2rem; }
+      .filter-bar { padding: 0 2rem; }
+      .project-header { grid-template-columns: 40px 1fr auto; gap: 1rem; }
+      .project-badges { display: none; }
+      .project-detail { grid-template-columns: 1fr; gap: 2rem; }
+    }
+    @media (max-width: 580px) {
+      .project-header { grid-template-columns: 1fr auto; }
+      .project-index { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Trevor Young <span>/ Projects</span></a>
+  <p class="nav-right">Durham, NC · Open to Remote</p>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-kicker">Security Engineering Portfolio</p>
+  <h1 class="hero-headline">Detection tools,<br />built from <em>scratch.</em></h1>
+  <div class="hero-sub">
+    <p class="hero-desc">
+      A collection of cybersecurity projects built to sharpen detection engineering, 
+      network analysis, and malware research skills. Each project is documented 
+      with a full case study, tech stack, and live GitHub link.
+    </p>
+    <div class="hero-count">
+      03 <span>Active Projects</span>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="detection">Detection</button>
+  <button class="filter-btn" data-filter="network">Network</button>
+  <button class="filter-btn" data-filter="malware">Malware</button>
+</div>
+
+<!-- PROJECTS -->
+<div class="projects-wrap">
+
+  <!-- PROJECT 1 -->
+  <div class="project-block" data-category="detection">
+    <div class="project-header">
+      <span class="project-index">01</span>
+      <div class="project-title-wrap">
+        <h2 class="project-name">Phishing Email Detector</h2>
+        <p class="project-tagline">Hybrid rule-based + ML classification engine for phishing detection</p>
+      </div>
+      <div class="project-badges">
+        <span class="badge badge-active">Active</span>
+        <span class="badge badge-active">Flagship</span>
+      </div>
+      <span class="expand-icon">+</span>
+    </div>
+    <div class="project-detail">
+      <div class="detail-overview">
+        <h4>Case Study</h4>
+        <p>
+          Built to address one of the most common attack vectors in enterprise environments, 
+          this tool combines <strong>rule-based heuristics (65%)</strong> and 
+          <strong>machine learning (35%)</strong> in a hybrid detection pipeline across 
+          8 distinct modules.
+        </p>
+        <p>
+          The classifier uses Naive Bayes via scikit-learn trained on labeled phishing datasets, 
+          while the rule engine evaluates header anomalies, sender spoofing patterns, 
+          suspicious link structures, and urgency language — mimicking how a SOC analyst 
+          would triage a suspicious email manually.
+        </p>
+        <p>
+          IMAP/SMTP integration allows the tool to connect directly to a live inbox and 
+          run classification on incoming mail in near real time.
+        </p>
+        <a href="https://github.com/trevoryoung" target="_blank" class="github-link">View on GitHub →</a>
+      </div>
+      <div class="detail-meta">
+        <div class="meta-row">
+          <span class="meta-label">Status</span>
+          <span class="meta-value">Active Development</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Category</span>
+          <span class="meta-value">Email Security / Detection</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Stack</span>
+          <div class="meta-value tags">
+            <span class="tag">Python</span>
+            <span class="tag">scikit-learn</span>
+            <span class="tag">Naive Bayes</span>
+            <span class="tag">IMAP</span>
+            <span class="tag">SMTP</span>
+            <span class="tag">NLP</span>
+          </div>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Architecture</span>
+          <span class="meta-value">8-Module Pipeline</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Detection Split</span>
+          <span class="meta-value">65% Rule-based / 35% ML</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 2 -->
+  <div class="project-block" data-category="network">
+    <div class="project-header">
+      <span class="project-index">02</span>
+      <div class="project-title-wrap">
+        <h2 class="project-name">Network Traffic Analyzer</h2>
+        <p class="project-tagline">Packet capture and anomaly detection for SOC triage workflows</p>
+      </div>
+      <div class="project-badges">
+        <span class="badge badge-progress">In Progress</span>
+      </div>
+      <span class="expand-icon">+</span>
+    </div>
+    <div class="project-detail">
+      <div class="detail-overview">
+        <h4>Case Study</h4>
+        <p>
+          Designed to replicate the packet-level visibility a SOC analyst needs during 
+          triage, this tool captures live network traffic and surfaces behavioral anomalies 
+          against an established baseline.
+        </p>
+        <p>
+          The analyzer performs <strong>protocol inspection across TCP, UDP, ICMP, and HTTP</strong>, 
+          flags unusual port activity, detects potential C2 beaconing patterns, and exports 
+          structured summaries for further investigation — bridging the gap between raw 
+          Wireshark captures and actionable alerts.
+        </p>
+        <a href="https://github.com/trevoryoung" target="_blank" class="github-link">View on GitHub →</a>
+      </div>
+      <div class="detail-meta">
+        <div class="meta-row">
+          <span class="meta-label">Status</span>
+          <span class="meta-value">In Progress</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Category</span>
+          <span class="meta-value">Network Security</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Stack</span>
+          <div class="meta-value tags">
+            <span class="tag">Python</span>
+            <span class="tag">Scapy</span>
+            <span class="tag">Wireshark</span>
+            <span class="tag">TCP/IP</span>
+          </div>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Protocols</span>
+          <span class="meta-value">TCP · UDP · ICMP · HTTP</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Output</span>
+          <span class="meta-value">Structured Alert Summaries</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 3 -->
+  <div class="project-block" data-category="malware">
+    <div class="project-header">
+      <span class="project-index">03</span>
+      <div class="project-title-wrap">
+        <h2 class="project-name">Malware Analysis Sandbox</h2>
+        <p class="project-tagline">Controlled environment for behavioral profiling of suspicious binaries</p>
+      </div>
+      <div class="project-badges">
+        <span class="badge badge-progress">In Progress</span>
+      </div>
+      <span class="expand-icon">+</span>
+    </div>
+    <div class="project-detail">
+      <div class="detail-overview">
+        <h4>Case Study</h4>
+        <p>
+          A controlled, isolated environment for detonating and analyzing suspicious 
+          executables without risk to the host system. Designed around the workflow 
+          of a malware analyst performing <strong>dynamic behavioral analysis</strong>.
+        </p>
+        <p>
+          Captures system call sequences, file system write events, registry key modifications, 
+          and outbound network callbacks in real time. Results are compiled into a 
+          standardized behavioral profile that maps to <strong>MITRE ATT&CK techniques</strong> 
+          where applicable, making findings immediately actionable for threat intel teams.
+        </p>
+        <a href="https://github.com/trevoryoung" target="_blank" class="github-link">View on GitHub →</a>
+      </div>
+      <div class="detail-meta">
+        <div class="meta-row">
+          <span class="meta-label">Status</span>
+          <span class="meta-value">In Progress</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Category</span>
+          <span class="meta-value">Malware Analysis</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Stack</span>
+          <div class="meta-value tags">
+            <span class="tag">Python</span>
+            <span class="tag">VirtualBox</span>
+            <span class="tag">YARA</span>
+            <span class="tag">Process Monitor</span>
+          </div>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Framework</span>
+          <span class="meta-value">MITRE ATT&CK Mapping</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Analysis Type</span>
+          <span class="meta-value">Dynamic Behavioral</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLACEHOLDER 4 -->
+  <div class="project-block placeholder" data-category="all">
+    <div class="project-header">
+      <span class="project-index">04</span>
+      <div class="project-title-wrap">
+        <h2 class="project-name">Coming Soon</h2>
+        <p class="project-tagline">Next project in planning — check back soon</p>
+      </div>
+      <div class="project-badges">
+        <span class="badge badge-placeholder">Planned</span>
+      </div>
+      <span class="expand-icon" style="opacity:0.2">+</span>
+    </div>
+  </div>
+
+  <!-- PLACEHOLDER 5 -->
+  <div class="project-block placeholder" data-category="all">
+    <div class="project-header">
+      <span class="project-index">05</span>
+      <div class="project-title-wrap">
+        <h2 class="project-name">Coming Soon</h2>
+        <p class="project-tagline">Next project in planning — check back soon</p>
+      </div>
+      <div class="project-badges">
+        <span class="badge badge-placeholder">Planned</span>
+      </div>
+      <span class="expand-icon" style="opacity:0.2">+</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Trevor Young · Cybersecurity Portfolio</p>
+  <div style="display:flex;gap:2rem;">
+    <a href="https://linkedin.com/in/trevoryoung" target="_blank">LinkedIn</a>
+    <a href="https://github.com/trevoryoung" target="_blank">GitHub</a>
+    <a href="mailto:trevor@example.com">Email</a>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .project-header').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+  });
+
+  // Nav scroll border
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 60);
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.project-block').forEach(el => observer.observe(el));
+
+  // Expand / collapse project detail
+  document.querySelectorAll('.project-block:not(.placeholder)').forEach(block => {
+    block.querySelector('.project-header').addEventListener('click', () => {
+      const isOpen = block.classList.contains('open');
+      document.querySelectorAll('.project-block').forEach(b => b.classList.remove('open'));
+      if (!isOpen) block.classList.add('open');
+    });
+  });
+
+  // Filter
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.project-block').forEach(block => {
+        const cat = block.dataset.category;
+        if (filter === 'all' || cat === filter || cat === 'all') {
+          block.classList.remove('hidden');
+        } else {
+          block.classList.add('hidden');
+          block.classList.remove('open');
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
