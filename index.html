@@ -125,7 +125,7 @@
       study, tech stack, and live GitHub link.
     </p>
     <div class="hero-count">
-      03 <span>Active Projects</span>
+      04 <span>Active Projects</span>
     </div>
   </div>
 </section>
@@ -135,6 +135,7 @@
   <button class="filter-btn" data-filter="detection">Detection</button>
   <button class="filter-btn" data-filter="network">Network</button>
   <button class="filter-btn" data-filter="siem">SIEM</button>
+  <button class="filter-btn" data-filter="cloud">Cloud</button>
 </div>
 
 <div class="projects-wrap">
@@ -279,22 +280,54 @@
     </div>
   </div>
 
-  <!-- PLACEHOLDER 5 -->
-  <div class="project-block placeholder" data-category="all">
+  <!-- PROJECT 4: WireGuard VPN on OCI -->
+  <div class="project-block" data-category="cloud">
     <div class="project-header">
       <span class="project-index">04</span>
       <div class="project-title-wrap">
-        <h2 class="project-name">Coming Soon</h2>
-        <p class="project-tagline">Next project in planning — check back soon</p>
+        <h2 class="project-name">WireGuard VPN on OCI</h2>
+        <p class="project-tagline">Self-hosted VPN on Oracle Cloud Infrastructure — encrypted tunnel with kill switch &amp; DNS leak protection</p>
       </div>
       <div class="project-badges">
-        <span class="badge badge-placeholder">Planned</span>
+        <span class="badge badge-active">Active</span>
       </div>
-      <span class="expand-icon" style="opacity:0.2">+</span>
+      <span class="expand-icon">+</span>
+    </div>
+    <div class="project-detail">
+      <div class="detail-overview">
+        <h4>Case Study</h4>
+        <p>
+          Deployed a <strong>production WireGuard VPN server on Oracle Cloud Infrastructure (OCI)</strong> 
+          using a free-tier ARM compute instance — provisioning a hardened Ubuntu server, generating 
+          asymmetric key pairs, and establishing a fully encrypted peer-to-peer tunnel from a local 
+          client with verified kill switch behavior to prevent traffic leaks on dropped connections.
+        </p>
+        <p>
+          Configured <strong>UFW firewall rules, IP forwarding, and NAT masquerading</strong> to route 
+          all client traffic through the VPN egress point, with DNS leak protection validated via 
+          real-world testing. Documented the full deployment as a reproducible guide covering OCI 
+          instance provisioning, WireGuard installation, peer key exchange, and client configuration.
+        </p>
+        <a href="https://github.com/trevjacq/wireguard-oci-vpn" target="_blank" class="github-link">github.com/trevjacq/wireguard-oci-vpn →</a>
+      </div>
+      <div class="detail-meta">
+        <div class="meta-row"><span class="meta-label">Status</span><span class="meta-value">Active Development</span></div>
+        <div class="meta-row"><span class="meta-label">Category</span><span class="meta-value">Network Security / Cloud</span></div>
+        <div class="meta-row">
+          <span class="meta-label">Stack</span>
+          <div class="meta-value tags">
+            <span class="tag">WireGuard</span><span class="tag">Oracle Cloud</span>
+            <span class="tag">Ubuntu</span><span class="tag">UFW</span>
+            <span class="tag">SSH</span><span class="tag">Bash</span>
+          </div>
+        </div>
+        <div class="meta-row"><span class="meta-label">Deployment</span><span class="meta-value">OCI Free Tier · ARM Instance</span></div>
+        <div class="meta-row"><span class="meta-label">Security Controls</span><span class="meta-value">Kill Switch · DNS Leak Protection</span></div>
+      </div>
     </div>
   </div>
 
-  <!-- PLACEHOLDER 6 -->
+  <!-- PLACEHOLDER 5 -->
   <div class="project-block placeholder" data-category="all">
     <div class="project-header">
       <span class="project-index">05</span>
