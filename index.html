@@ -404,6 +404,115 @@
       .findings-table-header span:last-child,
       .findings-table-row span:last-child { display: none; }
     }
+
+    /* PLAIN ENGLISH SECTION */
+    .plain-english {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 4rem 2rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .pe-section-label {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .pe-section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: normal;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    .pe-section-title em {
+      font-style: italic;
+      color: #aaa;
+    }
+
+    .pe-section-desc {
+      font-size: 15px;
+      color: #888;
+      max-width: 520px;
+      line-height: 1.65;
+      margin-bottom: 3rem;
+    }
+
+    .pe-list {}
+
+    .pe-item {
+      border-top: 1px solid var(--border);
+    }
+
+    .pe-item:last-child {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pe-item-inner {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 1rem;
+      padding: 1.75rem 0;
+    }
+
+    .pe-num {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      padding-top: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .pe-body {}
+
+    .pe-title {
+      font-size: 1.1rem;
+      font-weight: normal;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+
+    .pe-plain {
+      font-size: 14.5px;
+      color: #aaa;
+      line-height: 1.7;
+      max-width: 620px;
+      margin-bottom: 1rem;
+    }
+
+    .pe-analogy {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      margin-top: 0.25rem;
+    }
+
+    .pe-analogy-label {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .pe-analogy-value {
+      font-size: 13px;
+      color: #666;
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      .pe-item-inner { grid-template-columns: 2.5rem 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -749,6 +858,100 @@ study, tech stack, and live GitHub link.</p>
     </div>
 
   </div><!-- /projects -->
+
+  <section class="plain-english" id="plain-english">
+    <p class="pe-section-label">For Non-Technical Visitors</p>
+    <h2 class="pe-section-title">What these projects<br>actually <em>do.</em></h2>
+    <p class="pe-section-desc">No jargon. Just what was built, why it matters, and what problem it solves in the real world.</p>
+
+    <div class="pe-list">
+
+      <div class="pe-item">
+        <div class="pe-item-inner">
+          <span class="pe-num">01</span>
+          <div class="pe-body">
+            <h3 class="pe-title">Phishing Email Detector</h3>
+            <p class="pe-plain">Every day, people receive emails impersonating their bank, employer, or a trusted service — designed to steal passwords or financial information. This tool reads incoming emails and automatically flags suspicious ones before a person even opens them. It combines a rules checklist with a machine-learning model trained to spot patterns, then explains its verdict in plain language so anyone on the team understands what was flagged and why.</p>
+            <div class="pe-analogy">
+              <span class="pe-analogy-label">Think of it as —</span>
+              <span class="pe-analogy-value">a trained security screener sitting in your inbox 24/7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pe-item">
+        <div class="pe-item-inner">
+          <span class="pe-num">02</span>
+          <div class="pe-body">
+            <h3 class="pe-title">Network Traffic Analyzer</h3>
+            <p class="pe-plain">A network is like a highway — data packets are the cars. Most are normal, but occasionally something suspicious slips through. This tool watches all traffic in real time, logs where data is coming from and going to, and builds a live dashboard showing the busiest sources and unusual patterns. It captured and analyzed over 2,800 packets in its first live test run on a real network.</p>
+            <div class="pe-analogy">
+              <span class="pe-analogy-label">Think of it as —</span>
+              <span class="pe-analogy-value">a traffic camera and logbook for everything crossing your network</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pe-item">
+        <div class="pe-item-inner">
+          <span class="pe-num">03</span>
+          <div class="pe-body">
+            <h3 class="pe-title">SIEM Home Lab</h3>
+            <p class="pe-plain">Large organizations use Security Information &amp; Event Management (SIEM) systems to monitor thousands of devices at once and alert on suspicious activity. This is a fully built, working version of that — running on real hardware, ingesting live Windows event logs, and triggering alarms when things like repeated failed logins or unauthorized privilege changes occur. Built to mirror what enterprise security analysts use every day.</p>
+            <div class="pe-analogy">
+              <span class="pe-analogy-label">Think of it as —</span>
+              <span class="pe-analogy-value">a security operations center in miniature — alarms, dashboards, and all</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pe-item">
+        <div class="pe-item-inner">
+          <span class="pe-num">04</span>
+          <div class="pe-body">
+            <h3 class="pe-title">WireGuard VPN on OCI</h3>
+            <p class="pe-plain">A VPN creates an encrypted tunnel between your device and the internet so your traffic can't be intercepted. This is a self-hosted version — no third-party VPN company has access to your data. Deployed on a free cloud server, configured to automatically cut off all traffic if the connection drops (so data can never leak unprotected), and tested to confirm no DNS leaks under real-world conditions.</p>
+            <div class="pe-analogy">
+              <span class="pe-analogy-label">Think of it as —</span>
+              <span class="pe-analogy-value">a private, encrypted internet connection you fully own and control</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pe-item">
+        <div class="pe-item-inner">
+          <span class="pe-num">05</span>
+          <div class="pe-body">
+            <h3 class="pe-title">AWS IAM Security Assessment</h3>
+            <p class="pe-plain">Many companies store sensitive data in the cloud and misconfigure access settings without realizing it — leaving data exposed to anyone who knows where to look. This project runs an automated audit of a cloud environment using the same tool trusted by enterprise security teams, checking 63 security controls against federal benchmarks. Found and documented critical gaps, then produced a prioritized remediation plan ranked by risk severity.</p>
+            <div class="pe-analogy">
+              <span class="pe-analogy-label">Think of it as —</span>
+              <span class="pe-analogy-value">a full security inspection of a cloud environment with a written report card</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pe-item">
+        <div class="pe-item-inner">
+          <span class="pe-num">06</span>
+          <div class="pe-body">
+            <h3 class="pe-title">IT Asset Management Lab</h3>
+            <p class="pe-plain">Organizations need to know exactly which devices, software licenses, and equipment they own — who has what, where it is, and whether it's been returned or properly disposed of. This simulates a full asset tracking system for a 10-person company: every laptop, monitor, and license tracked from purchase to retirement, with documented procedures for checking equipment in and out, transferring it between staff, and securely wiping it before disposal.</p>
+            <div class="pe-analogy">
+              <span class="pe-analogy-label">Think of it as —</span>
+              <span class="pe-analogy-value">a complete inventory control system for an organization's technology assets</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
 
   <footer>
     <span class="footer-name">Trevor Young · Cybersecurity Portfolio</span>
